@@ -115,21 +115,20 @@ Generate a structured final assessment.
 Return ONLY valid JSON in exactly this format:
 
 {{
-    "overall_score": 1,
+    "summary": "",
     "strengths": [],
-    "knowledge_gaps": [],
-    "topics_assessed": [],
-    "recommendation": ""
+    "gaps": [],
+    "next": []
 }}
 
 Rules:
-- overall_score must be an integer from 1 to 5.
-- strengths must contain the candidate's strongest technical areas.
-- knowledge_gaps must contain important areas where the candidate needs improvement.
-- topics_assessed must list the curriculum topics covered during the interview.
-- recommendation must provide a concise overall technical assessment.
+- summary must be a concise overall assessment of the candidate.
+- strengths must contain concise, actionable technical strengths.
+- gaps must contain concise, actionable technical weaknesses or missing knowledge.
+- next must contain concise recommendations for what the candidate should learn or improve next.
+- strengths, gaps, and next must all be arrays of strings.
 """
-
+   
     response = client.models.generate_content(
         model="gemini-3.6-flash",
         contents=prompt,

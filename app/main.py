@@ -97,8 +97,8 @@ def interview(request: InterviewRequest):
             )
             return {
                 "reply": "Interview completed.",
-                "evaluation": evaluation,
-                "done": True
+                "done": True,
+                "feedback": final_feedback
             }
 
         next_question = generate_next_question(
