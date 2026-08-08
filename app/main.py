@@ -1,3 +1,4 @@
+from app.candidate_engine import build_candidate_profile
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
@@ -23,10 +24,14 @@ def interview(request : InterviewRequest):
 
     if request.candidate is not None:
 
+        candidate_id = request.candidate.get("id")
+        candidate_profile = build_candidate_profile(candidate_id)
+
         sessions[session_id] = {
             "candidate": request.candidate,
             "history" : []
         }
+
         return {
             "reply": "Welcome. Let's bring your interview.",
             "done": False
