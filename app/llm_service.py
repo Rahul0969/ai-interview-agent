@@ -34,4 +34,4 @@ Requirements:
         contents = prompt
     )
 
-    return response.text
+    return response.text 

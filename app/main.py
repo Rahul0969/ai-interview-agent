@@ -96,7 +96,7 @@ def interview(request: InterviewRequest):
                 session["history"]
             )
             return {
-                "reply": "Interview completed.",
+                "reply": "Interview completed.", 
                 "done": True,
                 "feedback": final_feedback
             }

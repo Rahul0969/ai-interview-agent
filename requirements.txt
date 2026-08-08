@@ -2,3 +2,21 @@ fastapi
 uvicorn
 google-genai
 python-dotenv
+
+{
+  "sessionId": "adaptive-001",
+  "message": "I would use cosine similarity because it measures the angle between embeddding vectors and is useful when the direction of the vectors matters more than their magnitude."
+}
+
+{
+  "sessionId": "adaptive-003",
+  "candidate": {
+    "id":"CAND-003",
+    "name" : "Emily Chen"
+  }
+}
+
+{
+  "sessionId": "adaptive-003",
+  "message": "I would maintain shared state between the agents and carefully control what context is passed to each agent. For context-window limitations, I would summarize older information and only provide the relevant parts of each agent."
+}
