@@ -1,4 +1,5 @@
 from app.candidate_engine import build_candidate_profile
+from app.curriculum_engine import get_topics
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
@@ -26,9 +27,12 @@ def interview(request : InterviewRequest):
 
         candidate_id = request.candidate.get("id")
         candidate_profile = build_candidate_profile(candidate_id)
+        curriculum = get_topics()
 
         sessions[session_id] = {
             "candidate": request.candidate,
+            "profile": candidate_profile,
+            "curriculum": curriculum,
             "history" : []
         }
 
