@@ -1,5 +1,6 @@
 from app.candidate_engine import build_candidate_profile
 from app.curriculum_engine import get_topics
+from app.llm_service import generate_first_question
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
@@ -36,8 +37,13 @@ def interview(request : InterviewRequest):
             "history" : []
         }
 
+        question = generate_first_question(
+            candidate_profile,
+            curriculum
+        )
+
         return {
-            "reply": "Welcome. Let's bring your interview.",
+            "reply": question,
             "done": False
         }
     
