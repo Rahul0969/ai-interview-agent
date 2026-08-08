@@ -1,6 +1,8 @@
 from app.candidate_engine import build_candidate_profile
 from app.curriculum_engine import get_topics
 from app.llm_service import generate_first_question
+from app.evaluator import evaluate_answer
+from app.evaluator import evaluate_answer,generate_next_question
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
@@ -30,17 +32,18 @@ def interview(request : InterviewRequest):
         candidate_profile = build_candidate_profile(candidate_id)
         curriculum = get_topics()
 
-        sessions[session_id] = {
-            "candidate": request.candidate,
-            "profile": candidate_profile,
-            "curriculum": curriculum,
-            "history" : []
-        }
-
         question = generate_first_question(
             candidate_profile,
             curriculum
         )
+
+        sessions[session_id] = {
+            "candidate": request.candidate,
+            "profile": candidate_profile,
+            "curriculum": curriculum,
+            "history" : [],
+            "current_question": question
+        }
 
         return {
             "reply": question,
@@ -54,10 +57,38 @@ def interview(request : InterviewRequest):
         }
 
     if request.message:
-        sessions[session_id]["history"].append({
+        session = sessions[session_id]
+        question = session["current_question"]
+
+        evaluation = evaluate_answer(
+            question,
+            request.message,
+            session["profile"]
+        )
+
+        next_question = generate_next_question(
+            session["profile"],
+            session["curriculum"],
+            question,
+            request.message,
+            evaluation
+        )
+
+        session["history"].append({
             "role":"candidate",
-            "message": request.message
+            "message": request.message,
+            "evaluation": evaluation
         })
+
+        session["current_question"] = next_question
+
+        return {
+            "reply": next_question,
+            "evaluation": evaluation,
+            "done" : False
+        }
+
+
     return {
         "reply": "Thank you for your answer.Let's continue further.",
         "done": False
