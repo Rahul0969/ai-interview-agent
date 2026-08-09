@@ -1,73 +1,55 @@
 # AI Usage Log
 
+This project was developed with AI assistance during the ViCODATHON hackathon.
+
 ## AI Tools Used
 
 - ChatGPT
-- Google Gemini 3.6 Flash
+- Google Gemini API
 
-## Purpose of AI Assistance
+## How AI Was Used
 
-AI tools were used during development for:
-- Understanding the hackathon requirements
-- Designing the adaptive interview architecture
-- Developing and debugging FastAPI components
-- Designing prompts for technical answer evaluation
-- Generating adaptive follow-up questions
-- Designing structured final interview feedback
-- Debugging API and JSON-related errors
-- Improving project documentation
+### Project Planning
+AI was used to:
+- Understand the problem statement
+- Plan the architecture
+- Break development into stages
+- Decide the frontend and backend structure
 
-## Gemini 3.6 Flash
+### Backend Development
+AI assistance was used for:
+- FastAPI structure
+- API endpoint design
+- Pydantic request models
+- CORS configuration
+- Session management
+- Debugging API errors
 
-Gemini 3.6 Flash is used as the primary LLM in the application.
+### AI Interview Logic
+AI assistance was used to:
+- Design candidate profiling
+- Design curriculum-based questioning
+- Create adaptive question generation
+- Design answer evaluation
+- Generate final interview feedback
 
-It is responsible for:
-- Generating interview questions
-- Evaluating candidate answers
-- Identifying strengths and knowledge gaps
-- Selecting adaptive follow-up questions
-- Generating final structured interview feedback
+### Frontend Development
+AI assistance was used for:
+- React component structure
+- API integration
+- Interview UI
+- Loading and error states
+- Progress indicators
+- Final feedback interface
 
-## Development Process
+### Debugging
+AI assistance was used to diagnose:
+- CORS errors
+- API connection issues
+- Gemini API quota errors
+- Frontend/backend integration problems
+- Deployment issues
 
-AI-generated suggestions were reviewed, modified, integrated, and tested during development.
+## Human Contribution
 
-The application was tested locally using FastAPI and Swagger UI.
-
-## Important Prompts
-
-### Answer Evaluation
-
-The model was instructed to evaluate a candidate's technical answer and return structured information including:
-
-- Score
-- Depth
-- Curriculum day
-- Topic
-- Strengths
-- Gaps
-- Recommendation
-
-### Adaptive Question Generation
-
-The model was instructed to generate one follow-up technical question based on:
-
-- Candidate profile
-- Curriculum
-- Previous question
-- Candidate answer
-- Evaluation
-- Previously covered curriculum days
-
-### Final Assessment
-
-The model was instructed to generate structured feedback containing:
-
-- Summary
-- Strengths
-- Knowledge gaps
-- Next steps
-
-## Human Verification
-
-The generated code and AI responses were tested and adjusted during development to ensure that the application followed the hackathon requirements.
+The project architecture, implementation decisions, testing, debugging, deployment, and final integration were reviewed and executed by the project developer.
