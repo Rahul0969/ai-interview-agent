@@ -12,8 +12,12 @@ function App() {
 
   const [sessionId, setSessionId] = useState("");
 
+  const [answer, setAnswer] = useState("");
+  const [evaluation, setEvaluation] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
 
   const startInterview = async () => {
     setError("");
@@ -45,7 +49,9 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || "Failed to start interview.");
+        throw new Error(
+          data.detail || "Failed to start interview."
+        );
       }
 
       setSessionId(newSessionId);
@@ -58,12 +64,56 @@ function App() {
     }
   };
 
+  const submitAnswer = async () => {
+    setError("");
+
+    if (!answer.trim()) {
+      setError("Please enter your answer.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/api/interview`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: sessionId,
+          message: answer.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || "Failed to submit answer."
+        );
+      }
+
+      setEvaluation(data.evaluation || null);
+      setQuestion(data.reply);
+      setQuestionNumber(data.questionNumber);
+      setAnswer("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="app">
       <main className="landing">
+
         {!question ? (
           <>
-            <div className="badge">AI-POWERED INTERVIEW</div>
+            <div className="badge">
+              AI-POWERED INTERVIEW
+            </div>
 
             <h1>
               Your Personal
@@ -71,57 +121,138 @@ function App() {
             </h1>
 
             <p className="description">
-              Practice technical interviews with an adaptive AI interviewer
-              that evaluates your answers and adjusts questions based on your
-              performance.
+              Practice technical interviews with an adaptive
+              AI interviewer that evaluates your answers and
+              adjusts questions based on your performance.
             </p>
 
             <div className="candidate-card">
+
               <h2>Start Your Interview</h2>
 
-              <label htmlFor="candidateName">Candidate Name</label>
+              <label htmlFor="candidateName">
+                Candidate Name
+              </label>
 
               <input
                 id="candidateName"
                 type="text"
                 placeholder="Enter your name"
                 value={candidateName}
-                onChange={(e) => setCandidateName(e.target.value)}
+                onChange={(e) =>
+                  setCandidateName(e.target.value)
+                }
               />
 
-              <label htmlFor="candidateId">Candidate ID</label>
+              <label htmlFor="candidateId">
+                Candidate ID
+              </label>
 
               <input
                 id="candidateId"
                 type="text"
                 placeholder="Enter your candidate ID"
                 value={candidateId}
-                onChange={(e) => setCandidateId(e.target.value)}
+                onChange={(e) =>
+                  setCandidateId(e.target.value)
+                }
               />
 
-              {error && <p className="error">{error}</p>}
+              {error && (
+                <p className="error">
+                  {error}
+                </p>
+              )}
 
-              <button onClick={startInterview} disabled={loading}>
-                {loading ? "Starting..." : "Start Interview →"}
+              <button
+                onClick={startInterview}
+                disabled={loading}
+              >
+                {loading
+                  ? "Starting..."
+                  : "Start Interview →"}
               </button>
+
             </div>
           </>
         ) : (
+
+
           <div className="interview-card">
+
             <div className="interview-header">
-              <span>AI INTERVIEWER</span>
-              <span>Question {questionNumber}</span>
+
+              <span>
+                AI INTERVIEWER
+              </span>
+
+              <span>
+                Question {questionNumber}
+              </span>
+
             </div>
 
-            <h2>Interview Question</h2>
+            <h2>
+              Interview Question
+            </h2>
 
-            <p className="question">{question}</p>
+            <p className="question">
+              {question}
+            </p>
+
+            <textarea
+              className="answer-box"
+              placeholder="Type your answer here..."
+              value={answer}
+              onChange={(e) =>
+                setAnswer(e.target.value)
+              }
+              rows="8"
+            />
+
+            {error && (
+              <p className="error">
+                {error}
+              </p>
+            )}
+
+            <button
+              className="submit-answer"
+              onClick={submitAnswer}
+              disabled={loading}
+            >
+              {loading
+                ? "Evaluating..."
+                : "Submit Answer →"}
+            </button>
+
+            {evaluation && (
+              <div className="evaluation">
+
+                <h3>
+                  Previous Answer Evaluation
+                </h3>
+
+                <p>
+                  <strong>Score:</strong>{" "}
+                  {evaluation.score}/5
+                </p>
+
+                <p>
+                  <strong>Depth:</strong>{" "}
+                  {evaluation.depth}
+                </p>
+
+              </div>
+            )}
 
             <p className="session">
               Session: {sessionId}
             </p>
+
           </div>
         )}
+
       </main>
     </div>
   );
