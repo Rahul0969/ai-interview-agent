@@ -1,5 +1,15 @@
 import json
+from google.genai.errors import ClientError
 from app.llm_service import client, MODEL_NAME
+
+
+def is_quota_error(error):
+    """
+    Check whether the Gemini API error is caused by
+    rate limiting or quota exhaustion.
+    """
+    return isinstance(error, ClientError) and getattr(error, "code", None) == 429
+
 
 def evaluate_answer(question, answer, candidate_profile):
 
@@ -42,25 +52,47 @@ Rules:
   "simplify"
 """
 
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json"
-        }
-    )
-
-    if not response.text:
-        raise RuntimeError("Gemini returned an empty evaluation.")
-
     try:
-        evaluation = json.loads(response.text)
-    except json.JSONDecodeError as error:
-        raise RuntimeError(
-            f"Gemini returned invalid evaluation JSON: {response.text}"
-        ) from error
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config={
+                "response_mime_type": "application/json"
+            }
+        )
 
-    return evaluation
+        if not response.text:
+            raise RuntimeError("Gemini returned an empty evaluation.")
+
+        try:
+            evaluation = json.loads(response.text)
+        except json.JSONDecodeError as error:
+            raise RuntimeError(
+                f"Gemini returned invalid evaluation JSON: {response.text}"
+            ) from error
+
+        return evaluation
+
+    except ClientError as error:
+
+        if is_quota_error(error):
+            print("Gemini quota exceeded. Using fallback evaluation.")
+
+            return {
+                "score": 3,
+                "depth": "medium",
+                "day": 1,
+                "topic": "Technical knowledge",
+                "strengths": [
+                    "Provided a structured technical response."
+                ],
+                "gaps": [
+                    "Further technical depth can be explored."
+                ],
+                "recommendation": "probe_deeper"
+            }
+
+        raise
 
 
 def generate_next_question(
@@ -106,15 +138,28 @@ Rules:
 Ask the next best interview question.
 """
 
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt
-    )
+    try:
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt
+        )
 
-    if not response.text:
-        raise RuntimeError("Gemini returned an empty question.")
+        if not response.text:
+            raise RuntimeError("Gemini returned an empty question.")
 
-    return response.text.strip()
+        return response.text.strip()
+
+    except ClientError as error:
+
+        if is_quota_error(error):
+            print("Gemini quota exceeded. Using fallback question.")
+
+            return (
+                "Can you explain how you would identify and troubleshoot "
+                "performance bottlenecks in a production data pipeline?"
+            )
+
+        raise
 
 
 def generate_final_feedback(candidate_profile, history):
@@ -147,22 +192,43 @@ Rules:
 - strengths, gaps, and next must all be arrays of strings.
 """
 
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json"
-        }
-    )
-
-    if not response.text:
-        raise RuntimeError("Gemini returned empty final feedback.")
-
     try:
-        feedback = json.loads(response.text)
-    except json.JSONDecodeError as error:
-        raise RuntimeError(
-            f"Gemini returned invalid feedback JSON: {response.text}"
-        ) from error
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config={
+                "response_mime_type": "application/json"
+            }
+        )
 
-    return feedback
+        if not response.text:
+            raise RuntimeError("Gemini returned empty final feedback.")
+
+        try:
+            feedback = json.loads(response.text)
+        except json.JSONDecodeError as error:
+            raise RuntimeError(
+                f"Gemini returned invalid feedback JSON: {response.text}"
+            ) from error
+
+        return feedback
+
+    except ClientError as error:
+
+        if is_quota_error(error):
+            print("Gemini quota exceeded. Using fallback final feedback.")
+
+            return {
+                "summary": "Interview completed. AI-generated detailed feedback was unavailable because the AI service quota was exhausted.",
+                "strengths": [
+                    "Candidate completed the interview."
+                ],
+                "gaps": [
+                    "Detailed AI evaluation was unavailable."
+                ],
+                "next": [
+                    "Review the technical topics covered during the interview."
+                ]
+            }
+
+        raise
