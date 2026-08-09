@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 from app.candidate_engine import build_candidate_profile
@@ -11,6 +12,15 @@ from app.evaluator import (
 )
 
 app = FastAPI(title="AI Interview Agent")
+
+app.add_middleware(
+    CORSMiddleware,
+
+    allow_origins=["https://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 sessions = {}
 
