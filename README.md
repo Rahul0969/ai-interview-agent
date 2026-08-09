@@ -84,9 +84,8 @@ Example request:
   }
 }
 
-# Run 
+### Run: 
 
 ```bash
 Name: Sarah Johnson
 Candidate ID: CAND-001
-```
