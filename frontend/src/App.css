@@ -15,26 +15,37 @@ body {
 
 .landing {
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   padding: 40px 20px;
+
   text-align: center;
 }
 
 .badge {
+  display: inline-block;
+
   padding: 8px 16px;
+
   border: 1px solid #3b82f6;
   border-radius: 999px;
+
   font-size: 12px;
   letter-spacing: 1px;
+
   margin-bottom: 24px;
 }
 
 h1 {
   max-width: 800px;
+
   margin: 0;
+
   font-size: 64px;
   line-height: 1.1;
 }
@@ -45,40 +56,56 @@ h1 span {
 
 .description {
   max-width: 650px;
+
   margin: 24px 0 35px;
+
   color: #aab4c8;
+
   font-size: 18px;
   line-height: 1.6;
 }
 
 .candidate-card {
   width: min(450px, 100%);
+
   padding: 30px;
+
   background: #11182b;
+
   border: 1px solid #26324d;
+
   border-radius: 18px;
+
   text-align: left;
 }
 
 .candidate-card h2 {
   margin-top: 0;
+
   text-align: center;
-  color:aliceblue;
 }
 
 .candidate-card label {
   display: block;
+
   margin: 18px 0 7px;
+
   color: #cbd5e1;
 }
 
 .candidate-card input {
   width: 100%;
+
   padding: 13px;
+
   border: 1px solid #334155;
+
   border-radius: 8px;
+
   background: #0b1020;
+
   color: white;
+
   font-size: 15px;
 }
 
@@ -88,14 +115,23 @@ h1 span {
 
 .candidate-card button {
   width: 100%;
+
   margin-top: 25px;
+
   padding: 14px;
+
   border: none;
+
   border-radius: 8px;
+
   background: #2563eb;
+
   color: white;
+
   font-size: 16px;
+
   font-weight: bold;
+
   cursor: pointer;
 }
 
@@ -103,16 +139,27 @@ h1 span {
   background: #1d4ed8;
 }
 
+.candidate-card button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
 .features {
   display: flex;
+
   gap: 50px;
+
   margin-top: 45px;
+
   max-width: 800px;
 }
 
 .features div {
   display: flex;
+
   flex-direction: column;
+
   gap: 8px;
 }
 
@@ -122,36 +169,36 @@ h1 span {
 
 .features span {
   color: #8f9bb3;
+
   font-size: 14px;
-}
-
-@media (max-width: 700px) {
-  h1 {
-    font-size: 42px;
-  }
-
-  .features {
-    flex-direction: column;
-    gap: 20px;
-  }
 }
 
 .interview-card {
   width: min(800px, 100%);
+
   padding: 35px;
+
   background: #11182b;
+
   border: 1px solid #26324d;
+
   border-radius: 18px;
+
   text-align: left;
 }
 
 .interview-header {
   display: flex;
+
   justify-content: space-between;
+
   color: #60a5fa;
+
   font-size: 14px;
+
   font-weight: bold;
-  margin-bottom: 40px;
+
+  margin-bottom: 30px;
 }
 
 .interview-card h2 {
@@ -160,32 +207,63 @@ h1 span {
 
 .question {
   color: #dbe4f0;
+
   font-size: 21px;
+
   line-height: 1.6;
 }
 
-.session {
-  margin-top: 35px;
-  color: #64748b;
-  font-size: 12px;
+.progress-container {
+  margin-bottom: 30px;
 }
 
-.error {
-  color: #f87171;
+.progress-text {
+  margin-bottom: 8px;
+
+  color: #94a3b8;
+
   font-size: 14px;
-  margin-top: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+
+  height: 6px;
+
+  background: #1e293b;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+
+  background: #3b82f6;
+
+  transition: width 0.3s ease;
 }
 
 .answer-box {
   width: 100%;
+
   margin-top: 25px;
+
   padding: 15px;
+
   border: 1px solid #334155;
+
   border-radius: 10px;
+
   background: #0b1020;
+
   color: white;
+
   font-size: 16px;
+
   line-height: 1.5;
+
   resize: vertical;
 }
 
@@ -195,14 +273,23 @@ h1 span {
 
 .submit-answer {
   width: 100%;
+
   margin-top: 15px;
+
   padding: 14px;
+
   border: none;
+
   border-radius: 8px;
+
   background: #2563eb;
+
   color: white;
+
   font-size: 16px;
+
   font-weight: bold;
+
   cursor: pointer;
 }
 
@@ -212,19 +299,130 @@ h1 span {
 
 .submit-answer:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
 }
 
 .evaluation {
   margin-top: 25px;
+
   padding: 20px;
+
   border: 1px solid #26324d;
+
   border-radius: 10px;
+
   background: #0d1425;
 }
 
 .evaluation h3 {
   margin-top: 0;
+
   color: #60a5fa;
 }
 
+.session {
+  margin-top: 35px;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.error {
+  color: #f87171;
+
+  font-size: 14px;
+
+  margin-top: 15px;
+}
+
+.feedback-card {
+  width: min(800px, 100%);
+
+  padding: 40px;
+
+  background: #11182b;
+
+  border: 1px solid #26324d;
+
+  border-radius: 18px;
+
+  text-align: left;
+}
+
+.feedback-card .badge {
+  display: block;
+
+  width: fit-content;
+
+  margin: 0 auto 24px;
+}
+
+.feedback-card h1 {
+  max-width: none;
+
+  text-align: center;
+
+  margin-bottom: 35px;
+}
+
+.feedback-card h1 span {
+  color: #60a5fa;
+}
+
+.feedback-section {
+  margin-top: 25px;
+
+  padding: 20px;
+
+  background: #0d1425;
+
+  border: 1px solid #26324d;
+
+  border-radius: 12px;
+}
+
+.feedback-section h2 {
+  margin-top: 0;
+
+  color: #60a5fa;
+
+  font-size: 20px;
+}
+
+.feedback-section p,
+.feedback-section li {
+  color: #cbd5e1;
+
+  line-height: 1.6;
+}
+
+.feedback-section ul {
+  padding-left: 20px;
+}
+
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 42px;
+  }
+
+  .features {
+    flex-direction: column;
+
+    gap: 20px;
+  }
+
+  .interview-card {
+    padding: 25px 20px;
+  }
+
+  .feedback-card {
+    padding: 25px 20px;
+  }
+
+  .question {
+    font-size: 18px;
+  }
+}
