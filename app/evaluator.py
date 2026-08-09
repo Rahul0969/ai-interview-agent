@@ -1,9 +1,8 @@
 import json
-
-from app.llm_service import client
-
+from app.llm_service import client, MODEL_NAME
 
 def evaluate_answer(question, answer, candidate_profile):
+
     prompt = f"""
 You are a strict but fair technical interview evaluator.
 
@@ -23,7 +22,7 @@ Return ONLY valid JSON in exactly this format:
 {{
     "score": 1,
     "depth": "basic",
-    "day" : 1,
+    "day": 1,
     "topic": "",
     "strengths": [],
     "gaps": [],
@@ -33,6 +32,8 @@ Return ONLY valid JSON in exactly this format:
 Rules:
 - score must be an integer from 1 to 5.
 - depth must be one of: "basic", "medium", "advanced".
+- day must be an integer representing the curriculum day.
+- topic must contain the main technical topic being evaluated.
 - strengths must contain concise technical strengths.
 - gaps must contain concepts the candidate should explain better.
 - recommendation must be one of:
@@ -42,14 +43,24 @@ Rules:
 """
 
     response = client.models.generate_content(
-        model="gemini-3.6-flash",
+        model=MODEL_NAME,
         contents=prompt,
-        config = {
-            "response_mime_type":"application/json"
+        config={
+            "response_mime_type": "application/json"
         }
     )
 
-    return json.loads(response.text)
+    if not response.text:
+        raise RuntimeError("Gemini returned an empty evaluation.")
+
+    try:
+        evaluation = json.loads(response.text)
+    except json.JSONDecodeError as error:
+        raise RuntimeError(
+            f"Gemini returned invalid evaluation JSON: {response.text}"
+        ) from error
+
+    return evaluation
 
 
 def generate_next_question(
@@ -60,6 +71,7 @@ def generate_next_question(
     evaluation,
     covered_days
 ):
+
     prompt = f"""
 You are an adaptive technical interviewer.
 
@@ -81,26 +93,32 @@ Evaluation:
 Already covered curriculum days:
 {covered_days}
 
-Important:
-- The interview must cover at least 4 different curriculum days.
-- If fewer than 4 days have been covered, prefer an uncovered curriculum day.
-- Once 4 different days are covered, you may use the best topic for adaptive follow-up.
-- The next question must still be relevant to the candidate's previous answer.
+Rules:
+- The interview should cover at least 4 different curriculum days.
+- If fewer than 4 days have been covered, choose an uncovered curriculum day.
+- Once 4 different days are covered, choose the best topic based on the candidate's performance.
+- The next question must be relevant to the candidate's previous answer.
 - Ask exactly ONE technical question.
 - Do not repeat the previous question.
 - Do not provide the answer.
+- Keep the question concise.
 
 Ask the next best interview question.
 """
 
     response = client.models.generate_content(
-        model="gemini-3.6-flash",
+        model=MODEL_NAME,
         contents=prompt
     )
 
+    if not response.text:
+        raise RuntimeError("Gemini returned an empty question.")
+
     return response.text.strip()
 
+
 def generate_final_feedback(candidate_profile, history):
+
     prompt = f"""
 You are a technical interview evaluator.
 
@@ -128,13 +146,23 @@ Rules:
 - next must contain concise recommendations for what the candidate should learn or improve next.
 - strengths, gaps, and next must all be arrays of strings.
 """
-   
+
     response = client.models.generate_content(
-        model="gemini-3.6-flash",
+        model=MODEL_NAME,
         contents=prompt,
         config={
             "response_mime_type": "application/json"
         }
     )
 
-    return json.loads(response.text)
+    if not response.text:
+        raise RuntimeError("Gemini returned empty final feedback.")
+
+    try:
+        feedback = json.loads(response.text)
+    except json.JSONDecodeError as error:
+        raise RuntimeError(
+            f"Gemini returned invalid feedback JSON: {response.text}"
+        ) from error
+
+    return feedback

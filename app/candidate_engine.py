@@ -4,21 +4,22 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 CANDIDATES_FILE = BASE_DIR / "data" / "candidates.json"
 
-
 def load_candidates():
     with open(CANDIDATES_FILE, "r", encoding="utf-8") as file:
-        return json.load(file)["candidates"]
+        data = json.load(file)
 
+    return data.get("candidates", [])
 
 def find_candidate(candidate_id):
     candidates = load_candidates()
 
     for candidate in candidates:
-        if candidate["member"]["id"] == candidate_id:
+        member = candidate.get("member", {})
+
+        if member.get("id") == candidate_id:
             return candidate
 
     return None
-
 
 def build_candidate_profile(candidate_id):
     candidate = find_candidate(candidate_id)
@@ -26,29 +27,30 @@ def build_candidate_profile(candidate_id):
     if candidate is None:
         return None
 
-    member = candidate["member"]
-    missions = candidate["missions"]
-    signals = candidate["signals"]
+    member = candidate.get("member", {})
+    missions = candidate.get("missions", [])
+    signals = candidate.get("signals", [])
 
     strengths = [
-        mission["title"]
+        mission.get("title")
         for mission in missions
         if mission.get("passed") is True
     ]
 
     gaps = [
-        mission["title"]
+        mission.get("title")
         for mission in missions
-        if mission.get("passed") is False or mission.get("skipped") is True
+        if mission.get("passed") is False
+        or mission.get("skipped") is True
     ]
 
     return {
-        "id": member["id"],
-        "name": member["name"],
-        "jobRole": member["jobRole"],
-        "yearsExperience": member["yearsExperience"],
-        "education": member["education"],
-        "status": member["status"],
+        "id": member.get("id"),
+        "name": member.get("name"),
+        "jobRole": member.get("jobRole"),
+        "yearsExperience": member.get("yearsExperience"),
+        "education": member.get("education"),
+        "status": member.get("status"),
         "strengths": strengths,
         "gaps": gaps,
         "signals": signals
