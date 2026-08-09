@@ -1,0 +1,177 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1020;
+  color: white;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.badge {
+  padding: 8px 16px;
+  border: 1px solid #3b82f6;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  max-width: 800px;
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.1;
+}
+
+h1 span {
+  color: #60a5fa;
+}
+
+.description {
+  max-width: 650px;
+  margin: 24px 0 35px;
+  color: #aab4c8;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.candidate-card {
+  width: min(450px, 100%);
+  padding: 30px;
+  background: #11182b;
+  border: 1px solid #26324d;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.candidate-card h2 {
+  margin-top: 0;
+  text-align: center;
+  color:aliceblue;
+}
+
+.candidate-card label {
+  display: block;
+  margin: 18px 0 7px;
+  color: #cbd5e1;
+}
+
+.candidate-card input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #0b1020;
+  color: white;
+  font-size: 15px;
+}
+
+.candidate-card input:focus {
+  outline: 2px solid #3b82f6;
+}
+
+.candidate-card button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.candidate-card button:hover {
+  background: #1d4ed8;
+}
+
+.features {
+  display: flex;
+  gap: 50px;
+  margin-top: 45px;
+  max-width: 800px;
+}
+
+.features div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.features strong {
+  color: #60a5fa;
+}
+
+.features span {
+  color: #8f9bb3;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 42px;
+  }
+
+  .features {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.interview-card {
+  width: min(800px, 100%);
+  padding: 35px;
+  background: #11182b;
+  border: 1px solid #26324d;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.interview-header {
+  display: flex;
+  justify-content: space-between;
+  color: #60a5fa;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.interview-card h2 {
+  margin-bottom: 20px;
+}
+
+.question {
+  color: #dbe4f0;
+  font-size: 21px;
+  line-height: 1.6;
+}
+
+.session {
+  margin-top: 35px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.error {
+  color: #f87171;
+  font-size: 14px;
+  margin-top: 15px;
+}
