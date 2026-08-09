@@ -16,7 +16,8 @@ app = FastAPI(title="AI Interview Agent")
 app.add_middleware(
     CORSMiddleware,
 
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173" ,
+                   "https://ai-interview-agent-red-beta.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
